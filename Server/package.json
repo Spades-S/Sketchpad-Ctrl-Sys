@@ -5,7 +5,7 @@
   "main": "servers/index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon",
-    "prod":"node servers/index.js"
+    "prod": "node servers/index.js"
   },
   "keywords": [],
   "author": "Spades <spadesge@gmail.com>",

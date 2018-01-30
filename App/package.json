@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build":"node ./build/build.js",
-    "dev":"webpack-dev-server --config ./build/webpack.dev.conf.js"
+    "build": "node ./build/build.js",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.conf.js"
   },
   "keywords": [],
   "author": "Spades <spadesge@gmail.com>",

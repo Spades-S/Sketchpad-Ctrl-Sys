@@ -11,6 +11,7 @@ module.exports = {
         cssSourceMap: true,
         usePostCss: false,
         devtool: 'source-map',
+        index: resolve('../../Server/view/index.html'),
         productionGzip: false
     },
     dev: {

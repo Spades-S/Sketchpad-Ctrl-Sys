@@ -47,7 +47,7 @@ const prodWebpackConf = {
         }),
         new HtmlWebpackPlugin({
             template: 'index.html',
-            filename: 'index.html',
+            filename: config.build.index,
             inject: true,
             minify: {
                 removeComments: true,
