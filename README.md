@@ -55,5 +55,6 @@
 ```
 
 ### Thanks
-这个脚手架参考了@berwin的[koa-vue-template](https://github.com/berwin/koa-vue-template) 以及 Vue官方模板[vuejs-templates/webpack]()https://github.com/vuejs-templates/webpack
+这个脚手架参考了@berwin的[koa-vue-template](https://github.com/berwin/koa-vue-template) 以及 Vue官方模板[vuejs-templates/webpack](https://github.com/vuejs-templates/webpack)
+
 非常感谢
