@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-        <my-header :state="isActive"></my-header>
+        <router-view name="header"></router-view>
         <div>
             <router-view></router-view>
             <router-view name="inform"></router-view>
@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import myHeader from './components/Header.vue'
 
     export default {
         name: 'App',
@@ -18,29 +17,17 @@
             return {
                 isActive: true
             }
-        },
-        components: {
-            'my-header': myHeader
-        },
-        created() {
-            if (this.$route.name === 'Login') {
-                this.isActive = false
-            } else {
-                this.isActive = true
-            }
-        },
-        updated() {
-            if (this.$route.name === 'Login') {
-                this.isActive = false
-            } else {
-                this.isActive = true
-            }
         }
+
     }
 </script>
 
 <style lang="scss">
     $defaultColor: #565656;
+    html {
+        font-size: 20px;
+    }
+
     #main {
         position: absolute;
         left: 0;

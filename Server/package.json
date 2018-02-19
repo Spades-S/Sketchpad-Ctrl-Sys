@@ -12,10 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "egg-logger": "^1.6.1",
+    "jsonwebtoken": "^8.1.1",
     "koa": "^2.4.1",
     "koa-middlewares": "^6.0.0",
     "koa-nunjucks-2": "^3.0.2",
     "koa-onerror": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "mysql": "^2.15.0",
     "utility": "^1.13.1"
   },
   "devDependencies": {

@@ -12,22 +12,38 @@
                     <span class="cell">昨日访问量</span>
                     <span class="cell">历史访问量</span>
                 </div>
-                <div class="row" v-for="(item,index) in num">
-                    <span class="cell">{{index + 1}}</span>
-                    <span class="cell">学校主页</span>
-                    <span class="cell">18</span>
-                    <span class="cell">81</span>
+                <div class="row" v-for="item in website">
+                    <span class="cell">{{item.id}}</span>
+                    <span class="cell">{{item.name}}</span>
+                    <span class="cell">{{item.yesterday}}</span>
+                    <span class="cell">{{item.total}}</span>
                 </div>
             </div>
         </div>
+        <el-pagination background layout="prev, pager, next" :total="16" :pageSize="8">
+        </el-pagination>
     </div>
 </template>
 <script>
+    const baseURL = require('../../config').baseURL
+    import axios from 'axios'
+
     export default {
         data() {
             return {
-                num: [1, 2, 3, 4, 5, 6, 7, 8]
+                website: []
             }
+        },
+        created() {
+            axios.get(`${baseURL}/websites`)
+                .then(res => {
+                    this.website = res.data
+                })
+                .catch(err => {
+                    console.log(err.response)
+                    this.$router.push('/login')
+
+                })
         }
     }
 </script>
@@ -82,6 +98,11 @@
             line-height: 2.3rem;
             text-align: center;
         }
+    }
+
+    .el-pagination {
+        margin-top: 1rem;
+        text-align: center;
     }
 
 

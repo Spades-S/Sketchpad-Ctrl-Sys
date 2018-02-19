@@ -20,16 +20,20 @@
                 <span class="cell">188</span>
             </div>
         </div>
+        <el-pagination background layout="prev, pager, next" :total="16" pageSize="8">
+        </el-pagination>
     </div>
 </template>
 
 <script>
+
     export default {
         data() {
             return {
                 num: [1, 2, 3, 4, 5, 6, 7, 8]
             }
-        }
+        },
+
     }
 
 </script>
@@ -37,6 +41,7 @@
 <style lang="scss" scoped>
     $contentBackground: #373a3d;
     $borderColor: #757272;
+    $borderRadius: 0.5rem;
     .container {
         margin-top: 4rem;
         padding-left: 2rem;
@@ -51,17 +56,23 @@
             background: url(../assets/pen.png) center 1.3rem/1.3rem;
 
         }
+
         .title {
             font-size: 0.9rem;
             vertical-align: top;
         }
+
         .content {
+            border-radius: $borderRadius;
             margin-top: 1rem;
             background: $contentBackground;
             font-size: 0.7rem;
             .row {
                 display: flex;
                 border-bottom: 1px solid $borderColor;
+                &:last-child {
+                    border-bottom: none;
+                }
             }
             .cell {
                 flex: 1 1 auto;
@@ -71,6 +82,12 @@
                 text-align: center;
             }
         }
+
+    }
+
+    .el-pagination {
+        margin-top: 3rem;
+        text-align: center;
     }
 
 </style>

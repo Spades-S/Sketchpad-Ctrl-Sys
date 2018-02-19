@@ -4,24 +4,33 @@
             <a class="logo" href="/"></a>
             <span class="title">教学辅助软件后台系统</span>
         </div>
-        <nav v-show="state">
-            <router-link to="/" class="item" >首页</router-link>
+        <nav>
+            <router-link to="/" class="item">首页</router-link>
             <router-link to="/penstat" class="item">画笔记录</router-link>
-            <span class="item">注销</span>
+            <span class="item" @click="signOut">注销</span>
         </nav>
-
-
     </div>
 
 </template>
 
 <script>
+    import cookie from '../utils/cookie'
+
     export default {
-        props:['state'],
         name: 'Header',
         data() {
             return {
                 msg: 'Welcome to Your Vue.js App'
+            }
+        },
+        methods: {
+            signOut() {
+                try {
+                    cookie.remove('TOKEN')
+                } catch (err) {
+                    console.log(err)
+                }
+                this.$router.push('login')
             }
         }
     }
@@ -60,7 +69,9 @@
             text-decoration: none;
             vertical-align: top;
             color: #fff;
+            cursor: pointer;
         }
+
     }
 
 </style>
