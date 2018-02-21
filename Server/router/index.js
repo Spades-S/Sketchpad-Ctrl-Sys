@@ -4,6 +4,9 @@
 
 const userRouter = require('./user')
 const websiteRouter = require('./website')
+const totalRouter = require('./total')
+const penstatRouter = require('./penstat')
+const informRouter = require('./inform')
 const verify = require('../middlewares/verify')
 
 function setRouters(router) {
@@ -13,7 +16,9 @@ function setRouters(router) {
     })
     userRouter.init(router)
     websiteRouter.init(router, verify)
-
+    totalRouter.init(router, verify)
+    penstatRouter.init(router, verify)
+    informRouter.init(router)
 }
 
 module.exports = setRouters

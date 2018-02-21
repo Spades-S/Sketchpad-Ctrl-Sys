@@ -2,11 +2,9 @@
  *  created by Spades <spadesge@gmail.com> 18/2/3
  */
 import Vue from 'vue'
-import axios from 'axios'
 import App from './App'
 import router from './router/index'
 
-const axiosBaseurl = require('../config').axiosBaseurl
 
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
@@ -24,8 +22,7 @@ router.beforeEach((to, from, next) => {
 
 })
 
-axios.defaults.baseURL = axiosBaseurl
-axios.defaults.withCredentials = true
+
 new Vue({
     el: '#app',
     router,

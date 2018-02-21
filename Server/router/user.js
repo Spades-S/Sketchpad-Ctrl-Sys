@@ -18,7 +18,7 @@ function init(router) {
                         data: ops.userName
                     },
                     secretKey, {
-                        expiresIn: '1 s'
+                        expiresIn: '1 day'
                     }
                 )
                 ctx.cookies.set('TOKEN', token, {
@@ -35,7 +35,6 @@ function init(router) {
     })
     router.put(`${baseURL}/users/changepsw`, async (ctx) => {
         let ops = JSON.parse(ctx.request.body.data.ops)
-        console.log(ops)
         let rowData = await userModel.getUserPSW(ops.userName)
         if (rowData.length > 0) {
             let password = rowData[0].password

@@ -5,34 +5,87 @@
             <span class="title">画笔激活统计</span>
         </div>
         <div class="content">
-            <div class="row">
+            <div class="row" @click="changeOrderBy">
                 <span class="cell">IP地址</span>
                 <span class="cell">教室</span>
-                <span class="cell">昨日激活次数</span>
-                <span class="cell">今日激活次数</span>
-                <span class="cell">总激活次数</span>
+                <span class="cell clickable yesterday">昨日激活次数<span class="triangle yesterday"></span></span>
+                <span class="cell clickable today">今日激活次数<span class="triangle today"></span></span>
+                <span class="cell clickable total">总激活次数<span class="triangle total"></span></span>
             </div>
-            <div class="row" v-for="n in num">
-                <span class="cell">10.10.103.24</span>
-                <span class="cell">东区303</span>
-                <span class="cell">18</span>
-                <span class="cell">81</span>
-                <span class="cell">188</span>
+            <div class="row" v-for="item in penStat">
+                <span class="cell">{{item.ip}}</span>
+                <span class="cell">{{item.classname}}</span>
+                <span class="cell">{{item.yesterday}}</span>
+                <span class="cell">{{item.today}}</span>
+                <span class="cell">{{item.total}}</span>
             </div>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="16" pageSize="8">
+        <el-pagination background layout="prev, pager, next" :total="total" :pageSize="pageSize" :currentPage="currentPage"
+                       @current-change="currentChange">
         </el-pagination>
     </div>
 </template>
 
 <script>
+    const pageSize = require('../../config').pageSize
+    const baseURL = require('../../config').baseURL
+    import axios from '../utils/http'
 
     export default {
         data() {
             return {
-                num: [1, 2, 3, 4, 5, 6, 7, 8]
+                penStat: [],
+                total: 0,
+                pageSize: pageSize,
+                orderBy: 'id',
+                currentPage: 1
             }
         },
+        created() {
+            this.getRes(1)
+            axios.get(`${baseURL}/total/penstats`)
+                .then(res => {
+                    this.total = res.data
+                })
+                .catch(err => {
+                    this.$router.push('/login')
+                })
+
+        },
+        methods: {
+            getRes(page) {
+                axios.get(`${baseURL}/penstats/${this.orderBy}/${page}`)
+                    .then(res => {
+                        this.penStat = res.data
+                    })
+                    .catch(err => {
+                        console.log(err.response)
+                        this.$router.push('/login')
+                    })
+            },
+            currentChange(currentPage) {
+                this.currentPage = currentPage
+                this.getRes(currentPage)
+            },
+            changeOrderBy(e) {
+                let orderBy, targetClassList
+                targetClassList = e.target.classList
+                if (targetClassList.contains('yesterday')) {
+                    orderBy = 'yesterday'
+                }
+                if (targetClassList.contains('today')) {
+                    orderBy = 'today'
+                }
+                if (targetClassList.contains('total')) {
+                    orderBy = 'total'
+                }
+                if (this.orderBy != orderBy) {
+                    this.orderBy = orderBy
+                    this.currentPage = 1
+                    this.getRes(1)
+                }
+            }
+        }
 
     }
 
@@ -42,6 +95,15 @@
     $contentBackground: #373a3d;
     $borderColor: #757272;
     $borderRadius: 0.5rem;
+    @mixin triangle($size,$color) {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: $size solid $color;
+        border-left: ($size/2) solid transparent;
+        border-right: ($size/2) solid transparent;
+    }
+
     .container {
         margin-top: 4rem;
         padding-left: 2rem;
@@ -80,6 +142,17 @@
                 width: 6rem;
                 line-height: 2.3rem;
                 text-align: center;
+            }
+            .triangle {
+                @include triangle(0.5rem, #fff);
+                margin-left: 0.3rem;
+            }
+            .clickable:hover {
+                cursor: pointer;
+                color: #bab7b7;
+                .triangle {
+                    border-top-color: #bab7b7;
+                }
             }
         }
 

@@ -2,6 +2,7 @@
  * created by Spades <spadesge@gmail.com> on 18/2/3
  */
 const koa = require('koa')
+const koaBody = require('koa-body')
 const middlewares = require('koa-middlewares')
 const Router = require('koa-router')
 const config = require('../config')
@@ -26,7 +27,7 @@ app.use(middlewares.staticCache(config.staticPath, {
 
 
 // 配置跨域
-if(config.env === 'development'){
+if (config.env === 'development') {
     app.use(async (ctx, next) => {
         ctx.set('Access-Control-Allow-Origin', 'http://localhost:8080');
         ctx.set('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, POST, DELETE')
@@ -36,7 +37,7 @@ if(config.env === 'development'){
     })
 }
 
-app.use(middlewares.bodyParser())
+app.use(koaBody({multipart: true}))
 app.use(router.routes())
     .use(router.allowedMethods());
 

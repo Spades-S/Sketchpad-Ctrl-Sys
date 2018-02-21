@@ -29,7 +29,7 @@
 
 <script>
     const baseURL = require('../../config').baseURL
-    import axios from 'axios'
+    import axios from '../utils/http'
     import cookie from '../utils/cookie'
 
     export default {
@@ -63,7 +63,6 @@
                         ops: JSON.stringify(option)
                     }
                 }).then(res => {
-                    cookie.remove('TOKEN')
                     _this.addBuzz(e.target, '密码修改成功', false, false)
                     setTimeout(() => {
                         _this.toLogin()

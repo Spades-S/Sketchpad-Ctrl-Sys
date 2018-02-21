@@ -5,7 +5,7 @@ const Webpack = require('webpack')
 module.exports = {
     context: resolve('../'),
     entry: {
-        app: './src/index.js'
+        app: ['babel-polyfill', './src/index.js']
     },
     output: {
         path: config.assetsRoot,
@@ -29,8 +29,8 @@ module.exports = {
             loader: 'babel-loader',
             include: [resolve('../src')]
         }, {
-            test:/\.css$/,
-            loader:['style-loader','css-loader']
+            test: /\.css$/,
+            loader: ['style-loader', 'css-loader']
         }, {
             test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
             loader: 'url-loader',
@@ -51,7 +51,7 @@ module.exports = {
             }
         }]
     },
-    plugins:[
+    plugins: [
         new Webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'

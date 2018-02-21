@@ -15,7 +15,6 @@
 
 <script>
     import cookie from '../utils/cookie'
-
     export default {
         name: 'Header',
         data() {

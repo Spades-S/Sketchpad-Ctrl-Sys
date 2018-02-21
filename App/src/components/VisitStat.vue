@@ -20,30 +20,48 @@
                 </div>
             </div>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="16" :pageSize="8">
+        <el-pagination background layout="prev, pager, next" :total="total" :pageSize="pageSize"
+                       @current-change="currentChange">
         </el-pagination>
     </div>
 </template>
 <script>
     const baseURL = require('../../config').baseURL
-    import axios from 'axios'
+    const pageSize = require('../../config').pageSize
+    import axios from '../utils/http'
 
     export default {
         data() {
             return {
-                website: []
+                website: [],
+                pageSize: pageSize,
+                total: 0
             }
         },
         created() {
-            axios.get(`${baseURL}/websites`)
+            this.getRes(1)
+            axios.get(`${baseURL}/total/websites`)
                 .then(res => {
-                    this.website = res.data
+                    this.total = res.data
                 })
                 .catch(err => {
-                    console.log(err.response)
                     this.$router.push('/login')
-
                 })
+        },
+        methods: {
+            getRes(page) {
+                axios.get(`${baseURL}/websites/${page}`)
+                    .then(res => {
+                        this.website = res.data
+                    })
+                    .catch(err => {
+                        this.$router.push('/login')
+                    })
+            },
+            currentChange(currentPage) {
+                this.getRes(currentPage)
+
+            }
         }
     }
 </script>
@@ -51,6 +69,7 @@
     $contentBackground: #373a3d;
     $borderColor: #757272;
     $borderRadius: 0.5rem;
+
     .outer {
         float: left;
         width: 50%;
@@ -101,7 +120,11 @@
     }
 
     .el-pagination {
-        margin-top: 1rem;
+        /*position: absolute;*/
+        /*left: 0;*/
+        /*right: 50%;*/
+        /*top: 34rem;*/
+        margin-top: 2rem;
         text-align: center;
     }
 
