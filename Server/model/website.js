@@ -1,5 +1,10 @@
 const query = require('./utils')
 
+async function getAllWebsites() {
+    let res = await query(`SELECT * FROM T_WEBSITE`)
+    return res
+}
+
 async function getOnePageWebsite(page, size) {
     let start = (page - 1) * size
     let end = page * size
@@ -14,6 +19,7 @@ async function getWebsiteNum() {
 
 
 module.exports = {
+    getAllWebsites: getAllWebsites,
     getOnePageWebsite: getOnePageWebsite,
     getWebsiteNum: getWebsiteNum
 }

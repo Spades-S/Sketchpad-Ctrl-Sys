@@ -19,6 +19,7 @@ function setRouters(router) {
     totalRouter.init(router, verify)
     penstatRouter.init(router, verify)
     informRouter.init(router)
+
 }
 
 module.exports = setRouters

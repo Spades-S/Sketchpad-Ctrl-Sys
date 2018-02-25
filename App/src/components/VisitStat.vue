@@ -21,7 +21,7 @@
             </div>
         </div>
         <el-pagination background layout="prev, pager, next" :total="total" :pageSize="pageSize"
-                       @current-change="currentChange">
+                       @current-change="currentChange" v-if="total > pageSize">
         </el-pagination>
     </div>
 </template>

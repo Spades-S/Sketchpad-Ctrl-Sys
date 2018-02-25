@@ -5,6 +5,7 @@ const koa = require('koa')
 const koaBody = require('koa-body')
 const middlewares = require('koa-middlewares')
 const Router = require('koa-router')
+const redisMiddleware = require('../middlewares/redis')
 const config = require('../config')
 const init = require('../common/init')
 const setRouters = require('../router')
@@ -24,6 +25,8 @@ app.use(middlewares.staticCache(config.staticPath, {
     maxAge: config.debug ? 0 : 60 * 60 * 24 * 7,
     gzip: config.enableCompress
 }))
+
+app.use(redisMiddleware)
 
 
 // 配置跨域

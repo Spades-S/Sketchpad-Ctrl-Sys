@@ -6,9 +6,18 @@ async function getOnePagePenStat(page, size, orderBy) {
     let res
     if (orderBy === 'id') {
         res = await query(`SELECT * FROM T_PEN LIMIT ${start},${end}`)
-    }else{
+    } else {
         res = await query(`SELECT * FROM T_PEN  ORDER BY ${orderBy} DESC LIMIT ${start},${end}`)
     }
+    return res
+}
+
+async function getIPArrByOrder(orderBy) {
+    let rows = await query(`SELECT ip FROM T_PEN ORDER BY ${orderBy} DESC`)
+    let res = []
+    rows.forEach(item => {
+        res.push(item.ip)
+    })
     return res
 }
 
@@ -17,8 +26,15 @@ async function getPenStatNum() {
     return res.length
 }
 
+async function getAllPenStats() {
+    let res = await query(`SELECT * FROM T_PEN`)
+    return res
+}
+
 
 module.exports = {
     getOnePagePenStat: getOnePagePenStat,
-    getPenStatNum: getPenStatNum
+    getPenStatNum: getPenStatNum,
+    getAllPenStats: getAllPenStats,
+    getIPArrByOrder: getIPArrByOrder
 }

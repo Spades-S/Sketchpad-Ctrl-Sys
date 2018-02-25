@@ -20,8 +20,9 @@
                 <span class="cell">{{item.total}}</span>
             </div>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="total" :pageSize="pageSize" :currentPage="currentPage"
-                       @current-change="currentChange">
+        <el-pagination background layout="prev, pager, next" :total="total" :pageSize="pageSize"
+                       :currentPage="currentPage"
+                       @current-change="currentChange" v-if="total>pageSize">
         </el-pagination>
     </div>
 </template>
