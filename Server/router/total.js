@@ -1,6 +1,4 @@
 const baseURL = require('../config').baseURL
-const penModel = require('../model/pen')
-
 
 function init(router, vertify) {
     router.get(`${baseURL}/total/websites`, vertify, async ctx => {
@@ -8,7 +6,7 @@ function init(router, vertify) {
         ctx.body = num
     })
     router.get(`${baseURL}/total/penstats`, vertify, async ctx => {
-        let num = await penModel.getPenStatNum()
+        let num = (await ctx.redis.get('penstats')).num
         ctx.body = num
     })
 }

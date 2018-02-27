@@ -6,7 +6,7 @@ function resolve(dir) {
 
 module.exports = {
     assetsRoot: resolve('../../Server/static'),
-    axiosBaseurl: 'http://localhost:3000',
+    axiosBaseurl: process.env.NODE_ENV ==='development'?'http://localhost:3000':'/',
     build: {
         node_env: 'production',
         cssSourceMap: true,

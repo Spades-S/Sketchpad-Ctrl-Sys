@@ -30,7 +30,6 @@ function init(router) {
     router.get(`${baseURL}/informs`, async ctx => {
         if (!(await ctx.redis.get('informs'))) {
             let res = await informModel.findInform()
-            console.log(res.length)
             if (!res.length) {
                 await ctx.redis.set('informs', {
                     status: false

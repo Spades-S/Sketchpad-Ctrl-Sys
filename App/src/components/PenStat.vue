@@ -47,6 +47,7 @@
             axios.get(`${baseURL}/total/penstats`)
                 .then(res => {
                     this.total = res.data
+                    console.log(res.data)
                 })
                 .catch(err => {
                     this.$router.push('/login')

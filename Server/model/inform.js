@@ -10,14 +10,20 @@ async function deleteInforms() {
     await query(`DELETE FROM T_INFORM`)
 }
 
+async function updateClickNum(num) {
+    await query(`UPDATE T_INFORM SET clicknum=${num}`)
+}
+
 
 async function findInform() {
     let res = await query(`SELECT * FROM T_INFORM`)
     return res
 }
 
+
 module.exports = {
     addInform: addInform,
     deleteInforms: deleteInforms,
-    findInform: findInform
+    findInform: findInform,
+    updateClickNum: updateClickNum
 }
