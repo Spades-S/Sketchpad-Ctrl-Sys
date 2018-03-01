@@ -104,14 +104,14 @@
         border-radius: $borderRadius;
         font-size: 0.7rem;
         .row {
-            display: flex;
+            height: 2.3rem;
             border-bottom: 1px solid $borderColor;
             &:last-child {
                 border-bottom: none;
             }
         }
         .cell {
-            flex: 1 1 auto;
+            float: left;
             display: inline-block;
             width: 25%;
             line-height: 2.3rem;
@@ -120,10 +120,6 @@
     }
 
     .el-pagination {
-        /*position: absolute;*/
-        /*left: 0;*/
-        /*right: 50%;*/
-        /*top: 34rem;*/
         margin-top: 2rem;
         text-align: center;
     }

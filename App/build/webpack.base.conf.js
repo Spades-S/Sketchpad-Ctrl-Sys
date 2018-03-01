@@ -26,8 +26,7 @@ module.exports = {
             options: VueLoaderConf
         }, {
             test: /\.js$/,
-            loader: 'babel-loader',
-            include: [resolve('../src')]
+            loader: 'babel-loader'
         }, {
             test: /\.css$/,
             loader: ['style-loader', 'css-loader']

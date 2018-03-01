@@ -100,7 +100,7 @@ async function updateDateSource(onlyMysql = true) {
 schedule.scheduleJob('0 * * *', function () {
     (async function () {
         await updateDateSource(false)
-    }).then()
+    })().then(()=>{})
 })
 
 

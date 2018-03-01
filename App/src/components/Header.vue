@@ -15,6 +15,7 @@
 
 <script>
     import cookie from '../utils/cookie'
+
     export default {
         name: 'Header',
         data() {
@@ -39,13 +40,14 @@
     $headerBackground: #373a3d;
     $logoSize: 3rem;
     .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         height: 5rem;
         margin: 0;
         padding: 0 2rem;
         background: $headerBackground;
+        & > div {
+            float: left;
+            margin-top: 1rem;
+        }
         .logo {
             display: inline-block;
             width: $logoSize;
@@ -59,6 +61,11 @@
             line-height: $logoSize;
             vertical-align: top;
             color: #fff;
+        }
+        & > nav {
+            float: right;
+            margin-top: 1rem;
+
         }
         .item {
             margin-left: 3rem;

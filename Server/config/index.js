@@ -13,5 +13,5 @@ module.exports = {
     },
     secretKey: 'SketchPad',
     staticPath: path.resolve(__dirname, '../static'),
-    viewPath: path.resolve(__dirname, '../view')
+    viewPath: path.resolve(__dirname, '../static')
 }

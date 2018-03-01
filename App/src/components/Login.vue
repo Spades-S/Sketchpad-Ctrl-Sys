@@ -164,12 +164,13 @@
 
     .content {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        top: calc(50% - 12.5rem);
+        left: calc(50% - 9rem);
+        /*<!--transform: translate(-50%, -50%);-->*/
         width: 18rem;
         height: 25rem;
         text-align: center;
+        background: rgba(212, 223, 234, 0.2784313725490196);
         background: linear-gradient(to bottom right, rgba(212, 223, 234, 0.2784313725490196), rgba(97, 97, 97, 0.23921568627450981));
         border-radius: 0.6rem;
         color: #fff;

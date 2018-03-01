@@ -37,7 +37,7 @@
         margin: 0;
         padding: 0;
         min-width: 960px;
-        min-height: 600px;
+        min-height: 826px;
         background: $defaultColor;
     }
 

@@ -47,9 +47,9 @@
             axios.get(`${baseURL}/total/penstats`)
                 .then(res => {
                     this.total = res.data
-                    console.log(res.data)
                 })
                 .catch(err => {
+                    console.log(err.response)
                     this.$router.push('/login')
                 })
 
@@ -132,16 +132,17 @@
             background: $contentBackground;
             font-size: 0.7rem;
             .row {
-                display: flex;
+                height:2.3rem;
                 border-bottom: 1px solid $borderColor;
                 &:last-child {
                     border-bottom: none;
                 }
             }
             .cell {
-                flex: 1 1 auto;
+                float: left;
                 display: inline-block;
-                width: 6rem;
+                width: 20%;
+                min-width: 6rem;
                 line-height: 2.3rem;
                 text-align: center;
             }

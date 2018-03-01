@@ -266,6 +266,7 @@
         .right {
             width: 70%;
             #url-upload {
+                overflow: auto;
                 display: block;
                 width: 100%;
                 font-size: 0.8rem;
@@ -273,7 +274,6 @@
                 color: #fff;
                 resize: none;
                 outline: none;
-
             }
         }
     }
