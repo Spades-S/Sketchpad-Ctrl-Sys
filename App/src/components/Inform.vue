@@ -104,8 +104,6 @@
                 let data = new FormData()
                 data.append('img', img)
                 data.append('url', url)
-
-
                 axios.post(`${baseURL}/informs/`, data, {
                     headers: {'content-type': 'multipart/form-data'}
                 }).then(res => {

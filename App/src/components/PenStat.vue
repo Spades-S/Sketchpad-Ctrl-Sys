@@ -8,9 +8,13 @@
             <div class="row" @click="changeOrderBy">
                 <span class="cell">IP地址</span>
                 <span class="cell">教室</span>
-                <span class="cell clickable yesterday">昨日激活次数<span class="triangle yesterday"></span></span>
-                <span class="cell clickable today">今日激活次数<span class="triangle today"></span></span>
-                <span class="cell clickable total">总激活次数<span class="triangle total"></span></span>
+                <span class="cell clickable yesterday">昨日激活次数<span
+                        class="triangle yesterday"
+                        :class={asc:isAsc.yesterday}></span></span>
+                <span class="cell clickable today">今日激活次数<span class="triangle today"
+                                                               :class={asc:isAsc.today}></span></span>
+                <span class="cell clickable total">总激活次数<span class="triangle total"
+                                                              :class={asc:isAsc.total}></span></span>
             </div>
             <div class="row" v-for="item in penStat">
                 <span class="cell">{{item.ip}}</span>
@@ -35,11 +39,17 @@
     export default {
         data() {
             return {
-                penStat: [],
-                total: 0,
-                pageSize: pageSize,
+                currentPage: 1,
+                isAsc: {
+                    id: false,
+                    yesterday: false,
+                    today: false,
+                    total: false
+                },
                 orderBy: 'id',
-                currentPage: 1
+                pageSize: pageSize,
+                penStat: [],
+                total: 0
             }
         },
         created() {
@@ -56,7 +66,7 @@
         },
         methods: {
             getRes(page) {
-                axios.get(`${baseURL}/penstats/${this.orderBy}/${page}`)
+                axios.get(`${baseURL}/penstats/${this.orderBy}/${this.isAsc[this.orderBy]}/${page}`)
                     .then(res => {
                         this.penStat = res.data
                     })
@@ -83,9 +93,11 @@
                 }
                 if (this.orderBy != orderBy) {
                     this.orderBy = orderBy
-                    this.currentPage = 1
-                    this.getRes(1)
                 }
+                this.currentPage = 1
+                this.isAsc[this.orderBy] = !this.isAsc[this.orderBy]
+                this.getRes(1)
+
             }
         }
 
@@ -97,11 +109,20 @@
     $contentBackground: #373a3d;
     $borderColor: #757272;
     $borderRadius: 0.5rem;
-    @mixin triangle($size,$color) {
+    @mixin triangle-down($size,$color) {
         display: inline-block;
         width: 0;
         height: 0;
         border-top: $size solid $color;
+        border-left: ($size/2) solid transparent;
+        border-right: ($size/2) solid transparent;
+    }
+
+    @mixin triangle-up($size,$color) {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-bottom: $size solid $color;
         border-left: ($size/2) solid transparent;
         border-right: ($size/2) solid transparent;
     }
@@ -132,7 +153,7 @@
             background: $contentBackground;
             font-size: 0.7rem;
             .row {
-                height:2.3rem;
+                height: 2.3rem;
                 border-bottom: 1px solid $borderColor;
                 &:last-child {
                     border-bottom: none;
@@ -147,7 +168,11 @@
                 text-align: center;
             }
             .triangle {
-                @include triangle(0.5rem, #fff);
+                @include triangle-down(0.5rem, #fff);
+                &.asc {
+                    @include triangle-up(0.5rem, #fff);
+                    border-top: none;
+                }
                 margin-left: 0.3rem;
             }
             .clickable:hover {
@@ -155,6 +180,7 @@
                 color: #bab7b7;
                 .triangle {
                     border-top-color: #bab7b7;
+                    border-bottom-color: #bab7b7;
                 }
             }
         }

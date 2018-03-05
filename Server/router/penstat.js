@@ -4,15 +4,16 @@ const penModel = require('../model/pen')
 
 
 function init(router, vertify) {
-    router.get(`${baseURL}/penstats/:orderBy/:page`, vertify, async ctx => {
+    router.get(`${baseURL}/penstats/:orderBy/:isAsc/:page`, vertify, async ctx => {
         let penstats = await ctx.redis.get('penstats')
         let orderBy = ctx.params.orderBy
         let page = Number(ctx.params.page)
+        let isAsc = ctx.params.isAsc == 'false'
         let indexArr = penstats.indexArr
 
-        if (orderBy != penstats.orderBy) {
+        if (orderBy != penstats.orderBy || isAsc != penstats.isAsc) {
             if (orderBy === 'id' || orderBy === 'yesterday') {
-                indexArr = await penModel.getIPArrByOrder(orderBy)
+                indexArr = await penModel.getIPArrByOrder(orderBy, isAsc)
             } else {
                 let sortArr = []
                 indexArr.forEach(item => {
@@ -22,6 +23,9 @@ function init(router, vertify) {
                     })
                 })
                 sortArr.sort((a, b) => {
+                    if(isAsc){
+                        return a.orderBy - b.orderBy
+                    }
                     return b.orderBy - a.orderBy
                 })
                 indexArr = []

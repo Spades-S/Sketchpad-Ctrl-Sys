@@ -40,6 +40,7 @@ async function getPenStasFromModel() {
 
     penstats.num = penStatRows.length
     penstats.orderBy = 'id'
+    penstats.isAsc = false
     return penstats
 }
 

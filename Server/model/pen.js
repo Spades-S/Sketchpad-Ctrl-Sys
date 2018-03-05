@@ -12,8 +12,12 @@ async function getOnePagePenStat(page, size, orderBy) {
     return res
 }
 
-async function getIPArrByOrder(orderBy) {
-    let rows = await query(`SELECT ip FROM T_PEN ORDER BY ${orderBy} DESC`)
+async function getIPArrByOrder(orderBy, isAsc) {
+    let order = 'DESC'
+    if(isAsc){
+        order = 'ASC'
+    }
+    let rows = await query(`SELECT ip FROM T_PEN ORDER BY ${orderBy} ${order}`)
     let res = []
     rows.forEach(item => {
         res.push(item.ip)
