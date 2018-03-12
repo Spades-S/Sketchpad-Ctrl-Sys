@@ -23,6 +23,7 @@
     "koa-session2": "^2.2.5",
     "mysql": "^2.15.0",
     "node-schedule": "^1.3.0",
+    "trek-captcha": "^0.4.0",
     "utility": "^1.13.1"
   },
   "devDependencies": {

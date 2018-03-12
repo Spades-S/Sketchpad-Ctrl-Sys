@@ -9,20 +9,30 @@
         </div>
         <div class="content" v-if="isLogin">
             <div class="tip">Welcome</div>
-            <input type="text" placeholder="username" id="l-username">
-            <input type="text" placeholder="password" id="l-password" key="l-psw">
+            <input type="text" placeholder="username" id="l-username" key="l-username">
+            <input type="text" placeholder="password" id="l-password" key="l-psw"><br>
+            <div class="verify-code">
+                <div class="img-container">
+                    <img :src="verifyCode" alt="">
+                    <div class="vc-change" @click="getVerifyCode">看不清换一个</div>
+                </div>
+                <input type="text" placeholder="请输入验证码" id="l-verifycode" key="l-verifycode">
+            </div>
             <input type="button" :value="loginMsg" @click="login">
-            <div><span class="ch-pw" @click="toChangePassword">更改密码</span></div>
-
         </div>
         <div class="content change" v-else>
             <div class="tip">Change password</div>
-            <input type="text" placeholder="username" id="c-username">
-            <input type="text" placeholder="old password" id="c-oldpsw" key="c-psw">
-            <input type="text" placeholder="new password" id="c-newpsw">
+            <input type="text" placeholder="old password" id="c-oldpsw">
+            <input type="text" placeholder="new password" id="c-newpsw" key="c-psw">
+            <input type="text" placeholder="new password" id="c-newpsw2">
+            <div class="verify-code">
+                <div class="img-container">
+                    <img :src="verifyCode" alt="">
+                    <div class="vc-change" @click="getVerifyCode">看不清换一个</div>
+                </div>
+                <input type="text" placeholder="请输入验证码" id="c-verifycode" key="c-verifycode">
+            </div>
             <input type="button" :value="changePSWMsg" @click="changePassword">
-            <div><span class="ch-pw" @click="toLogin">登录</span></div>
-
         </div>
     </div>
 </template>
@@ -33,29 +43,43 @@
     import cookie from '../utils/cookie'
 
     export default {
+        props: ['isLogin'],
         data() {
             return {
-                isLogin: true,
                 loginMsg: '登录',
-                changePSWMsg: '更改密码'
+                changePSWMsg: '更改密码',
+                verifyCode: ''
             }
+        },
+        created() {
+            this.getVerifyCode()
         },
         methods: {
             changePassword(e) {
-                let _this = this
                 let option = {
-                    userName: $('#c-username')[0].value.trim(),
+                    userName: 'admin',
                     oldPSW: $('#c-oldpsw')[0].value.trim(),
-                    newPSW: $('#c-newpsw')[0].value.trim()
+                    newPSW: $('#c-newpsw')[0].value.trim(),
+                    newPSW2: $('#c-newpsw2')[0].value.trim(),
+                    verifyCode: $('#c-verifycode')[0].value.trim()
                 }
-                if (!option.userName) {
-                    _this.addBuzz(e.target, '用户名为空')
-                    return
-                } else if (!option.oldPSW) {
-                    _this.addBuzz(e.target, '原密码为空')
+                if (!option.oldPSW) {
+                    this.addBuzz(e.target, '请输入原密码', false)
                     return
                 } else if (!option.newPSW) {
-                    _this.addBuzz(e.target, '新密码为空')
+                    this.addBuzz(e.target, '请输入新密码', false)
+                    return
+                } else if (!option.newPSW2) {
+                    this.addBuzz(e.target, '请再次输入新密码', false)
+                    return
+                } else if (!option.verifyCode) {
+                    this.addBuzz(e.target, '请输入验证码', false)
+                    return
+                }
+
+                if (option.newPSW != option.newPSW2) {
+                    this.addBuzz(e.target, '两次输入的新密码不一致', false)
+                    this.getVerifyCode()
                     return
                 }
                 axios.put(`${baseURL}/users/changepsw`, {
@@ -63,28 +87,34 @@
                         ops: JSON.stringify(option)
                     }
                 }).then(res => {
-                    _this.addBuzz(e.target, '密码修改成功', false, false)
+                    this.addBuzz(e.target, '密码修改成功', false, false)
                     setTimeout(() => {
-                        _this.toLogin()
+                        cookie.remove('TOKEN')
+                        this.$router.push('/login')
+                        this.getVerifyCode()
                     }, 1000)
 
                 }).catch(err => {
                     if (err.response.status === 401) {
-                        _this.addBuzz(e.target, err.response.data.error, false)
+                        this.addBuzz(e.target, err.response.data.error, false)
+                        this.getVerifyCode()
                     }
                 })
             },
             login(e) {
-                let _this = this
                 let option = {
                     userName: $('#l-username')[0].value.trim(),
-                    password: $('#l-password')[0].value.trim()
+                    password: $('#l-password')[0].value.trim(),
+                    verifyCode: $('#l-verifycode')[0].value.trim()
                 }
                 if (!option.userName) {
-                    _this.addBuzz(e.target, '用户名为空')
+                    this.addBuzz(e.target, '用户名为空', true)
                     return
                 } else if (!option.password) {
-                    _this.addBuzz(e.target, '密码为空')
+                    this.addBuzz(e.target, '密码为空', true)
+                    return
+                } else if (!option.verifyCode) {
+                    this.addBuzz(e.target, '验证码为空', true)
                     return
                 }
                 axios.get(`${baseURL}/users/check`, {
@@ -92,21 +122,24 @@
                         ops: JSON.stringify(option)
                     }
                 }).then(res => {
-                    _this.$router.push('/')
+                    this.$router.push('/')
 
                 }).catch(err => {
                     if (err.response.status === 401) {
-                        _this.addBuzz(e.target, err.response.data.error, true)
+                        this.addBuzz(e.target, err.response.data.error, true)
+                        this.getVerifyCode()
                     }
 
                 })
 
             },
-            toLogin() {
-                this.isLogin = true
-            },
-            toChangePassword(e) {
-                this.isLogin = false
+            getVerifyCode() {
+                axios.get(`${baseURL}/verifycode`)
+                    .then(res => {
+                        this.verifyCode = res.data
+                    }).catch(err => {
+                    console.log(err.response)
+                })
             },
             addBuzz(ele, msg, isLogin, isErr = true) {
                 if (isLogin) {
@@ -193,9 +226,11 @@
             outline: none;
             &[type="text"] {
                 padding-left: 0.9rem;
+                padding-right: 0.9rem;
 
             }
             &[type="button"] {
+                margin-top: 1rem;
                 color: #fff;
                 cursor: pointer;
                 &:hover {
@@ -206,9 +241,11 @@
                 border-color: #fff;
             }
             &::placeholder {
-                color: #d4d4d4;
+                color: #e0e0e0;
             }
-
+        }
+        &.change input {
+            margin-top: 1.5rem;
         }
         .ch-pw {
             display: inline-block;
@@ -216,6 +253,51 @@
             font-size: 0.5rem;
             border-bottom: 1px solid #a9b7d2;
             cursor: pointer;
+        }
+
+        .verify-code {
+            display: inline-block;
+            width: 12rem;
+            padding-top: 1.3rem;
+            padding-left: 0.8rem;
+            .img-container {
+                display: inline-block;
+                float: left;
+                width: 5rem;
+                img {
+                    display: inline-block;
+                    width: 5rem;
+                    height: 1.7rem;
+                }
+                .vc-change {
+                    border-bottom: 1px solid;
+                    margin: 0 0.7rem;
+                    font-size: 10px;
+                    text-align: center;
+                    -moz-user-select: none;
+                    -webkit-user-select: none;
+                    -ms-user-select: none;
+                    -khtml-user-select: none;
+                    user-select: none;
+                }
+                .vc-change:hover {
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                -webkit-border-radius: 0;
+                -moz-border-radius: 0;
+                border-radius: 0;
+                width: 5rem;
+                height: 1.7rem;
+                margin-top: 0;
+                padding-left: 0.4rem;
+                padding-right: 0.4rem;
+                font-size: 13px;
+
+            }
+
         }
         input.shake {
             animation: buzz-out 1s ease;

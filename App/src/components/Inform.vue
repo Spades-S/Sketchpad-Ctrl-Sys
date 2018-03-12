@@ -81,7 +81,6 @@
                 axios.delete(`${baseURL}/informs/`)
                     .then(res => {
                         console.log(res.data)
-
                     }).catch(err => {
                 })
             },
@@ -122,23 +121,42 @@
             },
             fileInputChange() {
                 let fileInputEle = $('#file')[0]
-                let file = fileInputEle.files[0]
                 let fileLabelEle = $('.img-upload')[0]
-                if (window.FileReader) {
-                    let reader = new FileReader()
-                    reader.readAsDataURL(file)
-                    reader.onload = (e) => {
-                        let image = new Image()
-                        image.onload = () => {
-                            this.informUpload.imageSize = `${image.width} x ${image.height}`
+                if (fileInputEle.files) {
+                    if (window.FileReader) {
+                        let file = fileInputEle.files[0]
+                        let reader = new FileReader()
+                        reader.readAsDataURL(file)
+                        reader.onload = (e) => {
+                            let image = new Image()
+                            image.onload = () => {
+                                this.informUpload.imageSize = `${image.width} x ${image.height}`
+                            }
+                            image.src = e.target.result
+                            this.informUpload.imageURL = e.target.result
+                            fileLabelEle.style.background = `url('${e.target.result}')  center no-repeat`
                         }
-                        image.src = e.target.result
-                        this.informUpload.imageURL = e.target.result
-                        fileLabelEle.style.background = `url(${e.target.result})  center no-repeat`
                     }
-                } else if (navigator.appName === 'Microsoft Internet Explorer') { // IE浏览器
-                    fileLabelEle.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)';
-                    fileLabelEle.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = file.value;
+                } else if (navigator.appName === 'Microsoft Internet Explorer') { // IE9
+                    fileInputEle.select()
+                    fileInputEle.blur()
+                    let targetURL = `file:///${document.selection.createRange().text.replace(/\\/g, '/')}`
+                    this.informUpload.imageURL = targetURL
+                    fileLabelEle.style.background = `url('${targetURL}' ) center no-repeat`
+
+                    //在ie9中利用filter获取本地图片宽高
+                    let tempEle = document.createElement('div');
+                    tempEle.style.position = 'absolute';
+                    tempEle.style.width = '1px';
+                    tempEle.style.height = '1px';
+                    tempEle.style.left = '-9999px';
+                    tempEle.style.top = '-9999px';
+                    tempEle.style.top = 0
+                    tempEle.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image)';
+                    document.body.insertBefore(tempEle, document.body.firstChild);
+                    tempEle.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = targetURL;
+                    this.informUpload.imageSize = `${tempEle.offsetWidth} x ${tempEle.offsetHeight}`
+
                 }
 
 
@@ -253,6 +271,7 @@
         .left {
             width: 30%;
             .container {
+                position: relative;
                 width: 4.8rem;
                 text-align: center;
             }

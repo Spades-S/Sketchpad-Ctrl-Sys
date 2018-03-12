@@ -12,7 +12,7 @@ class RedisStore {
         return JSON.parse(data)
     }
 
-    async set (name, value, maxAge = 24 * 60 * 60 * 1000) {
+    async set (name, value, maxAge = 48 * 60 * 60 * 1000) {
         try {
             await this.redis.set(name, JSON.stringify(value), 'EX', maxAge / 1000);
         } catch (e) {

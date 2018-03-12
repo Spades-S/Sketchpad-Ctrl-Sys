@@ -13,9 +13,16 @@ let redis = new RedisStore()
 async function initRedis() {
     await updateDateSource()
     if(process.env.MODE == 'clear'){
-        await redis.destroy('websites')
-        await redis.destroy('informs')
-        await redis.destroy('penstats')
+        if(await redis.get('websites')){
+            await redis.destroy('websites')
+        }
+        if(await redis.get('informs')){
+            await redis.destroy('informs')
+        }
+
+        if(await redis.get('penstats')){
+            await redis.destroy('penstats')
+        }
     }
 
 }
